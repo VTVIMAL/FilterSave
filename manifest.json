@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Filter Saver",
+  "version": "1.0.0",
+  "description": "Save and organize filters from Myntra shopping site.",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Filter Saver"
+  },
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://www.myntra.com/*",
+    "https://www.ajio.com/*"
+  ]
+} 
