@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Filter Saver",
   "version": "1.0.0",
-  "description": "Save and organize filters from Myntra shopping site.",
+  "description": "Save and organize filters from Myntra, Ajio, Amazon, and Flipkart shopping sites.",
   "action": {
     "default_popup": "index.html",
     "default_title": "Filter Saver"
@@ -13,6 +13,8 @@
   ],
   "host_permissions": [
     "https://www.myntra.com/*",
-    "https://www.ajio.com/*"
+    "https://www.ajio.com/*",
+    "https://www.amazon.*/*",
+    "https://www.flipkart.com/*"
   ]
 } 

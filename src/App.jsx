@@ -10,7 +10,10 @@ const SUPPORTED_SITES = [
     hasFilter: url => {
       try {
         const u = new URL(url);
-        return Array.from(u.searchParams.keys()).length > 0;
+        const params = Array.from(u.searchParams.keys());
+        // Myntra specific filter parameters
+        const filterParams = ['f', 'p', 'sort', 'price', 'brand', 'category', 'discount', 'rating'];
+        return params.some(param => filterParams.includes(param) || param.includes('filter'));
       } catch { return false; }
     }
   },
@@ -21,7 +24,51 @@ const SUPPORTED_SITES = [
     hasFilter: url => {
       try {
         const u = new URL(url);
-        return Array.from(u.searchParams.keys()).length > 0;
+        const params = Array.from(u.searchParams.keys());
+        // Ajio specific filter parameters
+        const filterParams = ['category', 'brand', 'price', 'discount', 'rating', 'color', 'size'];
+        return params.some(param => filterParams.includes(param) || param.includes('filter'));
+      } catch { return false; }
+    }
+  },
+  {
+    name: 'Amazon',
+    key: 'amazon',
+    match: url => url.includes('amazon.') && (url.includes('/s?') || url.includes('/gp/search')),
+    hasFilter: url => {
+      try {
+        const u = new URL(url);
+        const params = Array.from(u.searchParams.keys());
+        // Amazon specific filter parameters
+        const filterParams = ['rh', 'i', 'bbn', 'price', 'brand', 'rating', 'availability', 'sort'];
+        const hasSearch = params.includes('k') || params.includes('q');
+        const hasFilters = params.some(param => 
+          filterParams.includes(param) || 
+          param.startsWith('p_') || 
+          param.startsWith('n:') ||
+          param.includes('filter')
+        );
+        return hasSearch && hasFilters;
+      } catch { return false; }
+    }
+  },
+  {
+    name: 'Flipkart',
+    key: 'flipkart',
+    match: url => url.includes('flipkart.com') && url.includes('/search?'),
+    hasFilter: url => {
+      try {
+        const u = new URL(url);
+        const params = Array.from(u.searchParams.keys());
+        // Flipkart specific filter parameters
+        const filterParams = ['price', 'brand', 'discount', 'rating', 'availability', 'sort', 'offer'];
+        const hasSearch = params.includes('q');
+        const hasFilters = params.some(param => 
+          filterParams.includes(param) || 
+          param.includes('filter') ||
+          param.includes('range')
+        );
+        return hasSearch && hasFilters;
       } catch { return false; }
     }
   }
@@ -152,7 +199,7 @@ function App() {
 
   return (
     <div className="popup-container">
-      <h2>My Myntra & Ajio Filters</h2>
+      <h2>My Shopping Filters</h2>
       {hasFilter && (
         <button onClick={saveCurrentFilter} disabled={loading}>
           {loading ? 'Saving...' : 'Save Filter'}
