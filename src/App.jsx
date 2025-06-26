@@ -99,7 +99,8 @@ function App() {
         if (tab && tab.url) {
           const site = SUPPORTED_SITES.find(s => s.match(tab.url));
           setCurrentSite(site);
-          setHasFilter(site ? site.hasFilter(tab.url) : false);
+          const hasFilters = site ? site.hasFilter(tab.url) : false;
+          setHasFilter(hasFilters);
         } else {
           setCurrentSite(null);
           setHasFilter(false);
@@ -120,10 +121,14 @@ function App() {
         if (tab && tab.url && currentSite) {
           const name = prompt('Enter a name for this filter:', `My ${currentSite.name} Filter`)
           if (name) {
-            setFilters((prev) => [
-              { name, url: tab.url, site: currentSite.key, siteName: currentSite.name, createdAt: new Date().toISOString() },
-              ...prev,
-            ])
+            const newFilter = { 
+              name, 
+              url: tab.url, 
+              site: currentSite.key, 
+              siteName: currentSite.name, 
+              createdAt: new Date().toISOString() 
+            };
+            setFilters((prev) => [newFilter, ...prev])
           }
         } else {
           alert('Please use this on a supported shopping page!')
